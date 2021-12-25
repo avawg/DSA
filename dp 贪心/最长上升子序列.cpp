@@ -3,21 +3,21 @@
 using namespace std;
 
 // 时间复杂度O(n^2)
-int maxSequenceSum(int nums[], int n) {
+int longestIncreasingSubsequence(int nums[], int n) {
 	int dp[n];
-	// dp[i] 表示以i为终点的最大上升序列和
-	dp[0] = nums[0];
-	int ret = dp[0];
+	// dp[i] 表示以nums[i]为终点的最长上升子序列长度
+	dp[0] = 1;
+	int length = dp[0];
 	for (int i = 1; i < n; ++i) {
-		dp[i] = nums[i];
+		dp[i] = 1;
 		for (int j = 0; j < i; ++j) {
 			if (nums[j] < nums[i]) {
-				dp[i] = max(dp[i], dp[j] + nums[i]);
+				dp[i] = max(dp[i], dp[j] + 1);
 			}
 		}
-		ret = max(ret, dp[i]);
+		length = max(length, dp[i]);
 	}
-	return ret;
+	return length;
 }
 
 int main() {
@@ -27,7 +27,7 @@ int main() {
 	for (int i = 0; i < n; ++i) {
 		scanf("%d", &nums[i]);
 	}
-	int ret = maxSequenceSum(nums, n);
-	printf("%d", ret);
+	int length = longestIncreasingSubsequence(nums, n);
+	printf("%d", length);
 	return 0;
 }

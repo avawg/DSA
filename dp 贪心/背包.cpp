@@ -13,8 +13,8 @@ int ways(int nums[], int n, int target) {
 	dp[0] = 1;
 	for (int i = 1; i <= target; i++) dp[i] = 0;
 	for (int i = 0; i < n; i++) {
-		for (int j = 40; j >= nums[i]; j--) {
-				dp[j] += dp[j - nums[i]]; // 滚动数组 或 根据状态依赖调整迭代/循环的方向
+		for (int j = target; j >= nums[i]; j--) {
+			dp[j] += dp[j - nums[i]]; // 滚动数组 或 根据状态依赖调整迭代/循环的方向
 		}
 	}
 	return dp[target];
