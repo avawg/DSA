@@ -1,9 +1,17 @@
 import java.util.*;
 
 // 定义节点
+class Edge {
+    int to, dist;
+    public Edge(int to, int dist) {
+        this.to = to;
+        this.dist = dist;
+    }
+}
+
 class Node {
     int id, dist;
-    public Node(int id, int dist) {
+    public Edge(int id, int dist) {
         this.id = id;
         this.dist = dist;
     }
@@ -11,25 +19,23 @@ class Node {
 
 public class Dijkstra {
 
-    static void dijkstra(List<List<Node>> G, int source, int destination) {
+    static void dijkstra(List<List<Node>> G, int s, int t) {
         int n = G.size();
-        int[] dist = new int[n + 1];
-        boolean[] visit = new boolean[n + 1];
-        int[] path = new int[n + 1];
-        for (int i = 1; i <= n; i++) {
-            dist[i] = Integer.MAX_VALUE;
-            visit[i] = false;
+        int[] minDist = new int[n];
+        boolean[] visited = new boolean[n];
+        int[] path = new int[n];
+        for (int i = 0; i < n; i++) {
+            minDist[i] = Integer.MAX_VALUE;
             path[i] = -1;
         }
 
-        MinHeap queue = new MinHeap(n);
+        MinHeap<Node> queue = new MinHeap<>(n);
 
         // 将源节点加入
-        dist[source] = 0;
-        visit[source] = true;
-        for (Node node : G.get(source)) {
-            path[node.id] = source;
-            queue.add(node.id, node.dist);
+        dist[s] = 0;
+        visited[s] = true;
+        for (Edge edge : G.get(s)) {
+            queue.add(new Node(edge.to, edge.dist));
         }
 
         // 按递增的顺序找出到各顶点的最短路
@@ -37,28 +43,24 @@ public class Dijkstra {
                       用 min-heap O(|V|log(|V|) + |E|log(|V|) = O(|E|log(|V|))
                       用 Fibonacci heap O(|V|log(|V|) + |E|)
          */
+
+        // 每次找到与s距离最近的节点u
         while (!queue.isEmpty()) {
-            Node minDistNode = queue.remove();
-            // 更新邻接点到u的最小距离
-            for (Node node : G.get(minDistNode.id)) {
-                if (visit[node.id])
+            Node u = queue.remove();
+            // 根据u更新其邻接点到s的距离
+            for (Edge edge : G.get(u.id)) {
+                if (visited[edge.to])
                     continue;
-                if (dist[minDistNode.id] + node.dist < dist[node.id]) {
-                    dist[node.id] = dist[minDistNode.id] + node.dist;
-                    path[node.id] = minDistNode.id; // 更新路径
-                    queue.decrease(node.id, dist[node.id]);
+                if (dist[u.id] + edge.dist < dist[edge.to]) {
+                    dist[edge.to] = dist[u.id] + edge.dist;
+                    path[edge.to] = u.id; // 更新路径
+                    queue.decrease(edge.to, dist[edge.to]);
                 }
             }
         }
-
-        // 输出最短路径距离 和 到destination路径
-        for (int i = 1; i <= n; i++) {
-            System.out.print(dist[i] + ' ');
-        }
-        System.out.println();
-        while (destination != -1) {
-            System.out.println(path[destination] + ' ');
-            destination = path[destination];
+        while (t != -1) {
+            System.out.println(path[t] + ' ');
+            t = path[t];
         }
     }
 
@@ -69,8 +71,8 @@ public class Dijkstra {
         n = scanner.nextInt();
         m = scanner.nextInt();
         // 初始化图，邻接表存储
-        List<List<Node>> G = new ArrayList<>();
-        for (int i = 0; i <= n; i++) {
+        List<List<Edge>> G = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
             G.add(new ArrayList<>());
         }
         // 读入数据
@@ -78,12 +80,12 @@ public class Dijkstra {
             int s = scanner.nextInt();
             int t = scanner.nextInt();
             int dist = scanner.nextInt();
-            G.get(s).add(new Node(t, dist));
-            G.get(t).add(new Node(s, dist));
+            G.get(s).add(new Edge(t, dist));
+            G.get(t).add(new Edge(s, dist));
         }
-        int source, destination;
-        source = scanner.nextInt();
-        destination = scanner.nextInt();
-        dijkstra(G, source, destination);
+        int s, t;
+        s = scanner.nextInt();
+        t = scanner.nextInt();
+        dijkstra(G, s, t);
     }
 }

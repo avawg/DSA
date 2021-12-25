@@ -1,16 +1,16 @@
 import java.util.*;
 
-public class Kruskal {
+static class Edge {
+    int from, to, cost;
 
-    static class Edge {
-        int from, to, cost;
-
-        public Edge(int from, int to, int cost) {
-            this.from = from;
-            this.to = to;
-            this.cost = cost;
-        }
+    public Edge(int from, int to, int cost) {
+        this.from = from;
+        this.to = to;
+        this.cost = cost;
     }
+}
+
+public class Kruskal {
 
     // 找集合根节点
     static int find(int parents[], int x) {
@@ -25,9 +25,9 @@ public class Kruskal {
         int[] parents = new int[n + 1];
         for (int i = 1; i <= n; i++)
             parents[i] = -1;
-        // 自定义排序规则，由小到大排序
+
         Queue<Edge> queue = new PriorityQueue<>((e1, e2) -> e1.cost - e2.cost);
-        for (Kruskal.Edge edge : edges) {
+        for (Edge edge : edges) {
             queue.add(edge);
         }
 
@@ -60,10 +60,6 @@ public class Kruskal {
             edges.add(new Edge(from, to, cost));
         }
         int cost = kruskal(edges, n);
-        if (cost != -1) {
-            System.out.println(cost);
-        } else {
-            System.out.println("?");
-        }
+        System.out.println(cost != -1 ? cost : "?");
     }
 }
