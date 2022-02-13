@@ -14,7 +14,7 @@ class Solution {
         return dfs(root, 0);
     }
 
-    // 时间复杂度O(logn)
+    // 时间复杂度O(n)
     int dfs(TreeNode p, int depth) {
         if (p == null) {
             return 0;
