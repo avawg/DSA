@@ -1,4 +1,3 @@
-import java.util.LinkedList;
 
 public class Deque {
     static class Node {
@@ -66,7 +65,6 @@ public class Deque {
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Deque que = new Deque();
 	    que.push(19);
 	    que.push(88);

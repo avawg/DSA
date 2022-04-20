@@ -25,7 +25,7 @@ public class List {
         System.out.println();
     }
 
-    // 尾部添加元素，时间复杂度O(1)
+    // 尾部添加元素，时间复杂度O(n)
     public void append(int d) {
         Node r = new Node(d);
         if (head == null) {
@@ -39,13 +39,12 @@ public class List {
     }
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
         List l = new List(10);
         Scanner scanner = new Scanner(System.in);
         for (int x; (x = scanner.nextInt()) != -1; ) {
             l.append(x);
             l.print();
         }
-        in.close();
+        scanner.close();
     }
 }
