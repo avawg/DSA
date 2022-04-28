@@ -1,25 +1,25 @@
 import java.util.*;
 
-// 定义节点
-class Edge {
-    int to, dist;
-    public Edge(int to, int dist) {
-        this.to = to;
-        this.dist = dist;
-    }
-}
-
-class Node {
-    int id, dist;
-    public Node(int id, int dist) {
-        this.id = id;
-        this.dist = dist;
-    }
-}
-
 public class Dijkstra {
+    // 边
+    static class Edge {
+        int to, dist;
+        public Edge(int to, int dist) {
+            this.to = to;
+            this.dist = dist;
+        }
+    }
 
-    static void dijkstra(List<Edge>[] graph, int s, int t) {
+    // 节点
+    static class Node {
+        int id, dist;
+        public Node(int id, int dist) {
+            this.id = id;
+            this.dist = dist;
+        }
+    }
+
+    public static void dijkstra(List<Edge>[] graph, int s, int t) {
         int n = graph.length;
         int[] dist = new int[n];
         boolean[] visited = new boolean[n];
