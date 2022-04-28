@@ -1,78 +1,77 @@
-
 public class Deque {
     static class Node {
-        int data;
+        int val;
         Node prev, next;
-        public Node(Node prev, int d, Node next) {
-            data = d;
+        public Node(int val, Node prev, Node next) {
+            this.val = val;
             this.prev = prev;
             this.next = next;
         }
 	}
 
 	private int size;
-	private Node first, last;
+	private Node head, tail;
 
 	public Deque() {
 		size = 0;
-		first = last = null;
+		head = tail = null;
 	}
 
 	// 队尾入队，时间复杂度O(1)
-	public void push(int x) {
-		Node l = last;
-		Node node = new Node(l, x, null);
-		last = node;
-		if (first == null)  // 队伍为空
-			first = node;
-		else
-			l.next = node;
+	public void offer(int val) {
+		Node node = new Node(val, tail, null);
+		if (head == null) { // 队伍为空
+			head = tail = node;
+		} else {
+			tail.next = node;
+			tail = node;
+		}
 	    size++;
 	}
 
 	// 出队，并返回出队值，时间复杂度O(1)
-	public int pop(int c) {
-		Node node;
+	public int poll(int type) {
+		Node node = null;
 	    if (size == 1) { // 只有一个元素，出队后队伍为空
-	        node = first;
-			first = last = null;
+	        node = head;
+			head = tail = null;
 	    } else {
-	        if (c == 0) { // c=0队头出队
-	            node = first;
-	            first = first.next;
-				first.prev = null;
-	        } else { // c=1队尾出队
-	            node = last;
-				last = last.prev;
-				last.next = null;
+	        if (type == 0) { // type=0队头出队
+	            node = head;
+	            head = head.next;
+				head.prev = null;
+	        } else { // type=1队尾出队
+	            node = tail;
+				tail = tail.prev;
+				tail.next = null;
 	        }
 	    }
 	    size--;
 	    node.prev = node.next = null;
-	    return node.data; // 返回出队值
+	    return node.val; // 返回出队值
 	}
 
-	public int lastVal() {
-		return last.data;
+	public int peekLast() {
+		return tail.val;
 	}
 
-	public int firstVal() {
-		return first.data;
+	public int peekFirst() {
+		return head.val;
 	}
 
-	public boolean empty() {
+	public boolean isEmpty() {
 		return size == 0;
 	}
 
 	public static void main(String[] args) {
 		Deque que = new Deque();
-	    que.push(19);
-	    que.push(88);
-	    que.push(300);
-	    System.out.println(que.firstVal());
-	    System.out.println(que.lastVal());
-	    System.out.println(que.pop(0));
-	    System.out.println(que.pop(1));
-	    System.out.println(que.empty());
+	    que.offer(19);
+	    que.offer(88);
+	    que.offer(300);
+	    System.out.println(que.peekFirst());
+	    System.out.println(que.peekLast());
+	    System.out.println(que.poll(0));
+	    System.out.println(que.poll(1));
+	    System.out.println(que.isEmpty());
 	}
 }
