@@ -11,7 +11,7 @@ class Edge {
 
 class Node {
     int id, dist;
-    public Edge(int id, int dist) {
+    public Node(int id, int dist) {
         this.id = id;
         this.dist = dist;
     }
@@ -19,23 +19,23 @@ class Node {
 
 public class Dijkstra {
 
-    static void dijkstra(List<List<Node>> G, int s, int t) {
-        int n = G.size();
-        int[] minDist = new int[n];
+    static void dijkstra(List<Edge>[] graph, int s, int t) {
+        int n = graph.length;
+        int[] dist = new int[n];
         boolean[] visited = new boolean[n];
         int[] path = new int[n];
         for (int i = 0; i < n; i++) {
-            minDist[i] = Integer.MAX_VALUE;
+            dist[i] = Integer.MAX_VALUE;
             path[i] = -1;
         }
-
-        MinHeap<Node> queue = new MinHeap<>(n);
-
+        PriorityQueue<Node> pq = new PriorityQueue<>();
         // 将源节点加入
         dist[s] = 0;
         visited[s] = true;
-        for (Edge edge : G.get(s)) {
-            queue.add(new Node(edge.to, edge.dist));
+        for (Edge edge : graph[s]) {
+            int v = edge.to, d = edge.dist;
+            dist[v] = d;
+            pq.offer(new Node(v, d));
         }
 
         // 按递增的顺序找出到各顶点的最短路
@@ -45,16 +45,18 @@ public class Dijkstra {
          */
 
         // 每次找到与s距离最近的节点u
-        while (!queue.isEmpty()) {
-            Node u = queue.remove();
+        while (!pq.isEmpty()) {
+            Node node = pq.poll();
+            int u = node.id;
             // 根据u更新其邻接点到s的距离
-            for (Edge edge : G.get(u.id)) {
-                if (visited[edge.to])
+            for (Edge edge : graph[u]) {
+                int v = edge.to, d = edge.dist;
+                if (visited[v])
                     continue;
-                if (dist[u.id] + edge.dist < dist[edge.to]) {
-                    dist[edge.to] = dist[u.id] + edge.dist;
-                    path[edge.to] = u.id; // 更新路径
-                    queue.decrease(edge.to, dist[edge.to]);
+                if (dist[u] + d < dist[v]) {
+                    dist[v] = dist[u] + d;
+                    path[v] = u; // 更新路径
+                    pq.offer(new Node(v, dist[v]));
                 }
             }
         }
@@ -65,27 +67,24 @@ public class Dijkstra {
     }
 
     public static void main(String[] args) {
-
-        int n, m; // n节点数，m边数
         Scanner scanner = new Scanner(System.in);
-        n = scanner.nextInt();
-        m = scanner.nextInt();
+        int n = scanner.nextInt(); // n节点数
+        int m = scanner.nextInt(); // m边数
         // 初始化图，邻接表存储
-        List<List<Edge>> G = new ArrayList<>();
+        List<Edge>[] graph = new List[n];
         for (int i = 0; i < n; i++) {
-            G.add(new ArrayList<>());
+            graph[i] = new ArrayList<>();
         }
         // 读入数据
         for (int i = 0; i < m; i++) {
             int s = scanner.nextInt();
             int t = scanner.nextInt();
             int dist = scanner.nextInt();
-            G.get(s).add(new Edge(t, dist));
-            G.get(t).add(new Edge(s, dist));
+            graph[s].add(new Edge(t, dist));
+            graph[t].add(new Edge(s, dist));
         }
-        int s, t;
-        s = scanner.nextInt();
-        t = scanner.nextInt();
-        dijkstra(G, s, t);
+        int s = scanner.nextInt();
+        int t = scanner.nextInt();
+        dijkstra(graph, s, t);
     }
 }
