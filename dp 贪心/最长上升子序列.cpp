@@ -29,5 +29,4 @@ int main() {
 	}
 	int length = longestIncreasingSubsequence(nums, n);
 	printf("%d", length);
-	return 0;
 }
