@@ -21,12 +21,12 @@ int longestIncreasingSubsequence(int nums[], int n) {
 }
 
 int main() {
-	int n;
-	scanf("%d", &n);
+    int n;
+    scanf("%d", &n);
     int nums[n];
-	for (int i = 0; i < n; ++i) {
-		scanf("%d", &nums[i]);
-	}
-	int length = longestIncreasingSubsequence(nums, n);
-	printf("%d", length);
+    for (int i = 0; i < n; ++i) {
+        scanf("%d", &nums[i]);
+    }
+    int length = longestIncreasingSubsequence(nums, n);
+    printf("%d", length);
 }
