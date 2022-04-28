@@ -1,8 +1,7 @@
 import java.util.*;
 
-static class Edge {
+class Edge {
     int from, to, cost;
-
     public Edge(int from, int to, int cost) {
         this.from = from;
         this.to = to;
@@ -13,7 +12,7 @@ static class Edge {
 public class Kruskal {
 
     // 找集合根节点
-    static int find(int parents[], int x) {
+    public static int find(int parents[], int x) {
         if (parents[x] == -1) // 根
             return x;
         else
@@ -21,7 +20,7 @@ public class Kruskal {
     }
 
     // 最小生成树算法 时间复杂度 O(|E|log|E|)
-    static int kruskal(List<Edge> edges, int n) {
+    public static int kruskal(List<Edge> edges, int n) {
         int[] parents = new int[n + 1];
         for (int i = 1; i <= n; i++)
             parents[i] = -1;
@@ -48,10 +47,9 @@ public class Kruskal {
     }
 
     public static void main(String[] args) {
-        int n, m; // n节点数，m边数
         Scanner scanner = new Scanner(System.in);
-        m = scanner.nextInt();
-        n = scanner.nextInt();
+        int m = scanner.nextInt(); // m边数
+        int n = scanner.nextInt(); // n节点数
         List<Edge> edges = new ArrayList<>(m);
         for (int i = 0; i < m; i++) {
             int from = scanner.nextInt();
