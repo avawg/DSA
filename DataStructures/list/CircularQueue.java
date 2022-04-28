@@ -1,3 +1,6 @@
+/**
+ * 用一个固定大小的数组实现循环队列
+ */
 class CircularQueue {
 
     int[] nums;
