@@ -24,7 +24,7 @@ public class SellStock {
         }
         dp[0][0] = m;
         dfs(0, dp, nums, m, 0);
-        
+
         long ans = 0;
         for (int i = 0; i <= n; i++) {
             if (dp[n - 1][i] != -1) {
