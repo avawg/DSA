@@ -1,15 +1,15 @@
 import java.util.*;
 
-class Edge {
-    int from, to, cost;
-    public Edge(int from, int to, int cost) {
-        this.from = from;
-        this.to = to;
-        this.cost = cost;
-    }
-}
-
 public class Kruskal {
+
+    static class Edge {
+        int from, to, cost;
+        public Edge(int from, int to, int cost) {
+            this.from = from;
+            this.to = to;
+            this.cost = cost;
+        }
+    }
 
     // 找集合根节点
     public static int find(int parents[], int x) {
