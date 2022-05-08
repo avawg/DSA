@@ -5,35 +5,24 @@
  class Solution {
     public String longestPalindrome(String s) {
 
-        int len = s.length();
-        // dp[i][j]表示s[i:j]是否是回文子串
-        boolean[][] dp = new boolean[len][len];
-        for (int i = 0; i < len; i++) {
-            dp[i][i] = true;
+        int n = s.length();
+        if (n == 0) {
+            return "";
         }
-        int maxLen = 1;
-        int begin = 0;
+        // dp[i][j]表示s[i:j]是否是回文子串
+        boolean[][] dp = new boolean[n][n];
+        String ans = "";
         // 枚举子串长度
-        for (int L = 2; L <= len; L++) {
+        for (int len = 1; len <= n; len++) {
             // 枚举左边界
-            for (int i = 0; i < len; i++) {
-                int j = L + i - 1;
-                if (j >= len) {
-                    break;
-                }
-                if (s.charAt(i) == s.charAt(j)) {
-                    if (L <= 3) {
-                        dp[i][j] = true;
-                    } else {
-                        dp[i][j] = dp[i+1][j-1];
-                    }
-                }
-                if (dp[i][j] && L > maxLen) {
-                    maxLen = L;
-                    begin = i;
+            for (int l = 0; l < n + 1 - len; l++) {
+                int r = l + len - 1;
+                dp[i][j] = s.charAt(l) == s.charAt(r) && (l + 1 >= r - 1 || dp[l + 1][r - 1]);
+                if (dp[i][j]) {
+                    ans = s.substring(l, r + 1);
                 }
             }
         }
-        return s.substring(begin, begin + maxLen);
+        return ans;
     }
 }
