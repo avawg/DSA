@@ -5,53 +5,41 @@
 
 class Solution {
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        int length1 = nums1.length, length2 = nums2.length;
-        int totalLength = length1 + length2;
-        if (totalLength % 2 == 1) {
-            double median = findKthElement(nums1, nums2, totalLength / 2 + 1);
-            return median;
+        int m = nums1.length, n = nums2.length;
+        if ((m + n) % 2 == 0) {
+            int left = find(nums1, nums2, (m + n) / 2);
+            int right = find(nums1, nums2, (m + n) / 2 + 1);
+            return (left + right) / 2.0;
         } else {
-            double median = (findKthElement(nums1, nums2, totalLength / 2) + findKthElement(nums1, nums2, totalLength / 2 + 1)) / 2.0;
-            return median;
+            return find(nums1, nums2, (m + n) / 2 + 1);
         }
-
     }
 
-    public int findKthElement(int[] nums1, int[] nums2, int k) {
-        /* 主要思路：要找到第 k (k>1) 小的元素，那么就取 pivot1 = nums1[k/2-1] 和 pivot2 = nums2[k/2-1] 进行比较
-         * 这里的 "/" 表示整除
-         * nums1 中小于等于 pivot1 的元素有 nums1[0 .. k/2-1] 共计 k/2 个
-         * nums2 中小于等于 pivot2 的元素有 nums2[0 .. k/2-1] 共计 k/2 个
-         * 取 pivot = min(pivot1, pivot2)，两个数组中小于 pivot 的元素共计不会超过 (k/2 - 1) + (k/2-1) <= k-2 个
-         * 这样 pivot 本身最大也只能是第 k-1 小的元素
-         * 如果 pivot = pivot1，那么 nums1[0 .. k/2-1] 都不可能是第 k 小的元素。把这些元素全部 "删除"，剩下的作为新的 nums1 数组
-         * 如果 pivot = pivot2，那么 nums2[0 .. k/2-1] 都不可能是第 k 小的元素。把这些元素全部 "删除"，剩下的作为新的 nums2 数组
-         * 由于我们 "删除" 了一些元素（这些元素都比第 k 小的元素要小），因此需要修改 k 的值，减去删除的数的个数
-         */
-        int length1 = nums1.length, length2 = nums2.length;
-        int l1 = 0, l2 = 0;
+    // 在nums1, nums2两个正序数组中找第k大的数
+    int find(int[] nums1, int[] nums2, int k) {
+        int m = nums1.length, n = nums2.length;
+        int l1 = 0, r1 = m - 1;
+        int l2 = 0, r2 = n - 1;
+        // 淘汰部分数据, 缩小搜索范围, 二分
         while (true) {
-            if (l1 == nums1.length) {
+            if (l1 > r1) {
                 return nums2[l2 + k - 1];
             }
-            if (l2 == nums2.length) {
+            if (l2 > r2) {
                 return nums1[l1 + k - 1];
             }
             if (k == 1) {
                 return Math.min(nums1[l1], nums2[l2]);
             }
-            int newIndex1 = Math.min(l1 + k / 2 - 1, length1 - 1);
-            int newIndex2 = Math.min(l2 + k / 2 - 1, length2 - 1);
-            int pivot1 = nums1[newIndex1];
-            int pivot2 = nums2[newIndex2];
-            if (pivot1 <= pivot2) {
-                k -= newIndex1 - l1 + 1;
-                l1 = newIndex1 + 1;
+            int mid1 = Math.min(l1 + k / 2 - 1, r1);
+            int mid2 = Math.min(l2 + k / 2 - 1, r2);
+            if (nums1[mid1] <= nums2[mid2]) {
+                k -= mid1 - l1 + 1;
+                l1 = mid1 + 1;
             } else {
-                k -= newIndex2 - l2 + 1;
-                l2 = newIndex2 + 1;
+                k -= mid2 - l2 + 1;
+                l2 = mid2 + 1;
             }
         }
-        // return -1;
     }
 }
