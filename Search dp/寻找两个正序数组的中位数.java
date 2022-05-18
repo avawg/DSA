@@ -15,7 +15,7 @@ class Solution {
         }
     }
 
-    // 在nums1, nums2两个正序数组中找第k大的数
+    // 在nums1, nums2两个正序数组中找第k小的数
     int find(int[] nums1, int[] nums2, int k) {
         int m = nums1.length, n = nums2.length;
         int l1 = 0, r1 = m - 1;
