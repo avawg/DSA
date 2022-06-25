@@ -1,39 +1,40 @@
+/**
+ * 线段树求区间和，更改区间和
+ */
 class SegmentTree {
 
     class Node {
         Node left, right;
-        int height;
-        boolean flag;
+        int sum;
+        boolean flag; // 懒标记
     }
 
     Node root = new Node();
 
-    public int query(int l, int r, Node node, int s, int e) {
+    public int query(Node node, int l, int r, int s, int e) {
         if (s <= l && r <= e) {
-            return node.height;
+            return node.sum;
         }
         lazyCreate(node);
-        if (node.flag) pushDown(node);
-        int mid = (l + r) / 2;
-        int h = 0;
-        if (mid >= s) h = Math.max(h, query(l, mid, node.left, s, e));
-        if (mid + 1 <= e) h = Math.max(h, query(mid + 1, r, node.right, s, e));
-
-        return h;
+        if (node.flag) pushDown(node, l, r);
+        int mid = (l + r) >> 1;
+        int sum = 0;
+        if (mid >= s) sum += query(node.left, l, mid, s, e);
+        if (mid + 1 <= e) sum += query(node.right, mid + 1, r, s, e);
+        return sum;
     }
 
-    public void update(int l, int r, Node node, int s, int e, int h) {
+    public void update(Node node, int l, int r, int s, int e) {
         if (s <= l && r <= e) {
-            node.height = h;
+            node.sum = r - l + 1;
             node.flag = true;
             return ;
         }
         lazyCreate(node);
-        if (node.flag) pushDown(node);
-        int mid = (l + r) / 2;
-        if (mid >= s) update(l, mid, node.left, s, e, h);
-        if (mid + 1 <= e) update(mid + 1, r, node.right, s, e, h);
-        pushUp(node);
+        if (node.flag) pushDown(node, l, r);
+        int mid = (l + r) >> 1;
+        if (mid >= s) update(node.left, l, mid, s, e);
+        if (mid < e) update(node.right, mid + 1, r, s, e);
     }
 
     private void lazyCreate(Node node) {
@@ -41,13 +42,11 @@ class SegmentTree {
         if (node.right == null) node.right = new Node();
     }
 
-    private void pushDown(Node node) {
-        node.left.height = node.right.height = node.height;
+    private void pushDown(Node node, int l, int r) {
+        int mid = (l + r) >> 1;
+        node.left.sum = mid - l + 1;
+        node.right.sum = r - mid;
         node.left.flag = node.right.flag = true;
         node.flag = false;
-    }
-
-    private void pushUp(Node node) {
-        node.height = Math.max(node.left.height, node.right.height);
     }
 }
