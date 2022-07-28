@@ -7,11 +7,10 @@ void qsort(int nums[], int l, int r) {
     int mid = (l + r) / 2;
     swap(nums[l], nums[mid]);
     int pivot = nums[l];
-    int j = l + 1;
-    for (int i = l + 1; i <= r; i++) {
-        if (nums[i] <= pivot) {
-            swap(nums[j], nums[i]); j++;
-        }
+    int i = l + 1, j = l + 1;
+    while (i <= r) {
+        if (nums[i] <= pivot) swap(nums[i], nums[j++]);
+        i++;
     }
     j--;
     swap(nums[l], nums[j]);
