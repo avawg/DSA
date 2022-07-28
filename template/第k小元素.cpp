@@ -8,14 +8,12 @@ void qsort(int nums[], int l, int r, int k) {
     swap(nums[l], nums[mid]);
     int x = nums[l];
     int i = l + 1, j = l + 1;
-    for (; i <= r; i++) {
-        if (nums[i] <= x) {
-            swap(nums[j++], nums[i]);
-        }
+    while (i <= r) {
+        if (nums[i] <= x) swap(nums[i], nums[j++]);
+        i++;
     }
     j--;
     swap(nums[l], nums[j]);
-    // 缩小搜索范围，朝目标靠近
     if (j > k - 1) qsort(nums, l, j - 1, k);
     else if (j < k - 1) qsort(nums, j + 1, r, k);
 }
